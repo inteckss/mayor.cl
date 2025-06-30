@@ -1,0 +1,136 @@
+.path {
+    font-size: 12px;
+    color: black;
+}
+
+.cart-list {
+    width: 70%;
+    flex-direction: column;
+}
+.cart-list > div {
+    display: flex;
+}
+
+.cart-total {
+    width: 30%;
+}
+
+.content-body {
+    margin-top: 30px;
+}
+
+.cart-list > div {
+    display: flex;
+}
+
+.cart-title, .cart-total-title{
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.resume-list {
+    flex-flow: column;
+}
+
+.resume-header {
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid lightgray;
+}
+
+.resume-item-body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.resume-item-body > div {
+    display: flex;
+}
+
+.resume-item {
+    min-width: 40%;
+}
+
+.resume-item-body > img {
+    width: 87px;
+}
+
+.resume-precio {
+    min-width: 15%;
+    align-items: center;
+}
+
+.resume-cantidad {
+    min-width: 15%;
+    align-items: center;
+}
+
+.resume-total {
+    min-width: 30%;
+    align-items: center;
+}
+
+.resume-header > div {
+    display: flex;
+}
+
+.resume-item-text {
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.resume-total-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.cart-total, .cart-total > div {
+    display: flex;
+}
+
+.cart-total {
+    flex-direction: column;
+}
+
+.cart-total-line {
+    justify-content: space-between;
+}
+
+.cart-total-line > span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+span.total-price {
+    font-size: 20px;
+}
+.iva {
+    margin-top: 15px;
+}
+
+.total {
+    margin-top: 15px;
+}
+
+.cart-total-line4 {
+    justify-content: center;
+}
+
+.cart-total-line4 > button {
+    min-width: 100%;
+    margin-top: 15px;
+    background: none;
+    padding: 13px 37px;
+    border: none !important;
+    border-radius: 20px !important;
+    font-family: 'Poppins', sans-serif !important;
+    color: white;
+    background-color: #0156FF !important;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Tienda — Catálogo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Mi Tienda</h1>
+    <nav>
+      <a href="index.html">Catálogo</a>
+      <a href="carrito.html">Carrito (<span id="contador-carrito">0</span>)</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main id="productos">
+    <!-- Aquí irán las tarjetas de producto -->
+  </main>
+
+  <aside id="carrito">
+    <h2>Tu Carrito</h2>
+    <ul id="lista-carrito"></ul>
+    <p>Total: $<span id="total">0</span></p>
+    <button id="checkout">Finalizar compra</button>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
