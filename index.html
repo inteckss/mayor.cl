@@ -8,24 +8,49 @@
 </head>
 <body>
   <header>
-    <h1>Mi Tienda</h1>
-    <nav>
-      <a href="index.html">Catálogo</a>
-      <a href="cart.html">Carrito (<span id="contador-carrito">0</span>)</a>
-      <a href="login.html">Login</a>
-    </nav>
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        🛍️ Mi Tienda
+      </a>
+      
+      <nav class="nav-container">
+        <div class="nav-links" id="navLinks">
+          <a href="index.html">Catálogo</a>
+          <a href="cart.html" class="cart-link">
+            🛒 Carrito 
+            <span class="cart-count" id="contador-carrito">0</span>
+          </a>
+          <a href="login.html">👤 Login</a>
+        </div>
+        
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
+    </div>
   </header>
 
-  <main id="productos">
-    <!-- Aquí irán las tarjetas de producto -->
-  </main>
+  <div class="main-container">
+    <main id="productos">
+      <!-- Aquí irán las tarjetas de producto -->
+    </main>
 
-  <aside id="carrito">
-    <h2>Tu Carrito</h2>
-    <ul id="lista-carrito"></ul>
-    <p>Total: $<span id="total">0</span></p>
-    <button id="checkout">Finalizar compra</button>
-  </aside>
+    <aside id="carrito">
+      <h2>🛒 Tu Carrito</h2>
+      <ul id="lista-carrito"></ul>
+      
+      <div class="total-section">
+        <div class="total-label">Total a pagar:</div>
+        <div class="total-amount">$<span id="total">0</span></div>
+      </div>
+      
+      <button id="checkout">
+        💳 Finalizar Compra
+      </button>
+    </aside>
+  </div>
 
   <script src="app.js"></script>
   <script src="auth.js"></script>
