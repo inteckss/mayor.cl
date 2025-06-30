@@ -24,8 +24,16 @@ const productos = [
 let carrito = [];
 
 // Base de datos simulada de usuarios
-let usuarios = [];
-let nextUserId = 1;
+let usuarios = [
+  {
+    id: 1,
+    nombre: 'Usuario Demo',
+    email: 'demo@demo.com',
+    password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password: demo123
+    fechaRegistro: new Date()
+  }
+];
+let nextUserId = 2;
 
 // Middleware para verificar token JWT
 function authenticateToken(req, res, next) {

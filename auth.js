@@ -1,3 +1,4 @@
+// auth.js - Sistema de autenticación
 // URL base de la API
 const API = 'http://localhost:3000/api';
 
@@ -66,9 +67,9 @@ async function loginUser(credentials) {
       localStorage.setItem('user', JSON.stringify(data.user));
       
       showMessage('Inicio de sesión exitoso. Redirigiendo...', 'success');
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 1500);
+      
+      // Redirigir inmediatamente sin delay
+      window.location.href = 'index.html';
     } else {
       showMessage(data.message || 'Credenciales incorrectas');
     }
@@ -82,7 +83,14 @@ async function loginUser(credentials) {
 function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href = 'login.html';
+  
+  // Actualizar navegación
+  updateNavigation();
+  
+  // Redirigir al login
+  setTimeout(() => {
+    window.location.href = 'login.html';
+  }, 500);
 }
 
 // Verificar si el usuario está logueado
@@ -95,6 +103,8 @@ function getCurrentUser() {
   const userData = localStorage.getItem('user');
   return userData ? JSON.parse(userData) : null;
 }
+
+// ...existing code...
 
 // Evento DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -167,19 +177,39 @@ document.addEventListener('DOMContentLoaded', function() {
 // Función para actualizar la navegación según el estado de login
 function updateNavigation() {
   const user = getCurrentUser();
-  const navElement = document.querySelector('nav');
+  const navLinks = document.getElementById('navLinks');
   
-  if (user && navElement) {
-    // Usuario logueado - mostrar nombre y logout
-    const loginLink = navElement.querySelector('a[href="login.html"]');
+  if (user && navLinks) {
+    // Usuario logueado - buscar el enlace de login
+    const loginLink = navLinks.querySelector('a[href="login.html"]');
+    
     if (loginLink) {
-      loginLink.innerHTML = `
-        <div class="user-info">
-          <span class="user-name">Hola, ${user.nombre}</span>
-          <button class="logout-btn" onclick="logout()">Salir</button>
+      const userSectionHTML = `
+        <div class="user-section">
+          <span class="user-name">👤 Hola, ${user.nombre}</span>
+          <button class="logout-btn" onclick="logout()">🚪 Cerrar Sesión</button>
         </div>
       `;
-      loginLink.href = "#";
+      
+      loginLink.outerHTML = userSectionHTML;
+    } else {
+      // Si no encuentra el link de login, verificar si ya existe la sección de usuario
+      const existingUserSection = navLinks.querySelector('.user-section');
+      if (!existingUserSection) {
+        const userSectionHTML = `
+          <div class="user-section">
+            <span class="user-name">👤 Hola, ${user.nombre}</span>
+            <button class="logout-btn" onclick="logout()">🚪 Cerrar Sesión</button>
+          </div>
+        `;
+        navLinks.insertAdjacentHTML('beforeend', userSectionHTML);
+      }
+    }
+  } else if (navLinks) {
+    // Usuario no logueado - asegurar que el enlace de login esté presente
+    const userSection = navLinks.querySelector('.user-section');
+    if (userSection) {
+      userSection.outerHTML = '<a href="login.html">👤 Login</a>';
     }
   }
 }

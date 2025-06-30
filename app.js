@@ -1,9 +1,9 @@
 // URL base de tu API
-const API = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:3000/api';
 
 // Carga y muestra el catálogo desde la API
 async function mostrarProductos() {
-  const res = await fetch(`${API}/productos`);
+  const res = await fetch(`${API_URL}/productos`);
   const productos = await res.json();
   const cont = document.getElementById('productos');
   cont.innerHTML = '';
@@ -22,13 +22,13 @@ async function mostrarProductos() {
 
 // Obtiene el carrito actual desde la API
 async function obtenerCarrito() {
-  const res = await fetch(`${API}/carrito`);
+  const res = await fetch(`${API_URL}/carrito`);
   return res.json();
 }
 
 // Agrega un producto al carrito vía POST
 async function agregarAlCarrito(id) {
-  await fetch(`${API}/carrito`, {
+  await fetch(`${API_URL}/carrito`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id })
@@ -38,7 +38,7 @@ async function agregarAlCarrito(id) {
 
 // Elimina un producto del carrito vía DELETE
 async function eliminarDelCarrito(id) {
-  await fetch(`${API}/carrito/${id}`, { method: 'DELETE' });
+  await fetch(`${API_URL}/carrito/${id}`, { method: 'DELETE' });
   actualizarCarrito();
 }
 

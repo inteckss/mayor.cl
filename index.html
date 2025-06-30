@@ -52,12 +52,28 @@
     </aside>
   </div>
 
-  <script src="app.js"></script>
   <script src="auth.js"></script>
+  <script src="app.js"></script>
   <script>
     // Actualizar navegación al cargar la página
     document.addEventListener('DOMContentLoaded', function() {
-      updateNavigation();
+      // Esperar un poco para asegurar que todos los scripts se cargaron
+      setTimeout(() => {
+        if (typeof updateNavigation === 'function') {
+          updateNavigation();
+        }
+      }, 100);
+      
+      // Funcionalidad del menú hamburger
+      const hamburger = document.getElementById('hamburger');
+      const navLinks = document.getElementById('navLinks');
+      
+      if (hamburger && navLinks) {
+        hamburger.addEventListener('click', function() {
+          hamburger.classList.toggle('active');
+          navLinks.classList.toggle('active');
+        });
+      }
     });
   </script>
 </body>
