@@ -65,6 +65,7 @@ async function actualizarCarrito() {
     carrito.forEach(p => {
       const li = document.createElement('li');
       li.innerHTML = `
+        <img src="${p.imagen}" alt="${p.nombre}" class="cart-item-img">
         <div class="item-info">
           <div class="item-name">${p.nombre}</div>
           <div class="item-price">$${p.precio.toLocaleString()}</div>
@@ -87,6 +88,7 @@ async function actualizarCarrito() {
 window.onload = () => {
   mostrarProductos();
   actualizarCarrito();
+  initializeCartSidebar();
   
   // Botón de checkout (vacía carrito)
   document.getElementById('checkout').onclick = async () => {
@@ -95,9 +97,8 @@ window.onload = () => {
     const result = confirm('¿Estás seguro de que deseas finalizar la compra?');
     if (result) {
       alert('¡Compra completada exitosamente! 🎉\nGracias por tu compra.');
-      // Podrías aquí enviar una orden real… 
-      carrito = []; // opcional: vaciar array local
       actualizarCarrito();
+      closeCartSidebar();
     }
   };
   
@@ -128,3 +129,50 @@ window.onload = () => {
     });
   }
 };
+
+// Inicializar funcionalidad del sidebar del carrito
+function initializeCartSidebar() {
+  const cartToggle = document.getElementById('cart-toggle');
+  const cartSidebar = document.getElementById('cart-sidebar');
+  const cartOverlay = document.getElementById('cart-overlay');
+  const closeCartBtn = document.getElementById('close-cart');
+
+  // Abrir carrito al hacer click en el ícono
+  cartToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    openCartSidebar();
+  });
+
+  // Cerrar carrito con el botón X
+  closeCartBtn.addEventListener('click', closeCartSidebar);
+
+  // Cerrar carrito al hacer click en el overlay
+  cartOverlay.addEventListener('click', closeCartSidebar);
+
+  // Cerrar carrito con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cartSidebar.classList.contains('active')) {
+      closeCartSidebar();
+    }
+  });
+}
+
+// Abrir sidebar del carrito
+function openCartSidebar() {
+  const cartSidebar = document.getElementById('cart-sidebar');
+  const cartOverlay = document.getElementById('cart-overlay');
+  
+  cartSidebar.classList.add('active');
+  cartOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden'; // Evitar scroll
+}
+
+// Cerrar sidebar del carrito
+function closeCartSidebar() {
+  const cartSidebar = document.getElementById('cart-sidebar');
+  const cartOverlay = document.getElementById('cart-overlay');
+  
+  cartSidebar.classList.remove('active');
+  cartOverlay.classList.remove('active');
+  document.body.style.overflow = ''; // Restaurar scroll
+}

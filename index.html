@@ -16,13 +16,18 @@
       <nav class="nav-container">
         <div class="nav-links" id="navLinks">
           <a href="index.html">Catálogo</a>
-          <a href="cart.html" class="cart-link">
+          <a href="#" class="cart-link" id="cart-toggle">
             🛒 Carrito 
             <span class="cart-count" id="contador-carrito">0</span>
           </a>
-          <a href="login.html">👤 Login</a>
+          <a href="login.html" id="login-link">👤 Login</a>
         </div>
         
+        <div class="user-section" id="user-section" style="display: none;">
+          <span class="user-name" id="user-name"></span>
+          <button class="logout-btn" id="logout-btn">Cerrar Sesión</button>
+        </div>
+
         <div class="hamburger" id="hamburger">
           <span></span>
           <span></span>
@@ -36,21 +41,26 @@
     <main id="productos">
       <!-- Aquí irán las tarjetas de producto -->
     </main>
+  </div>
 
-    <aside id="carrito">
+  <!-- Carrito Sidebar -->
+  <div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
       <h2>🛒 Tu Carrito</h2>
-      <ul id="lista-carrito"></ul>
-      
+      <button id="close-cart" class="close-cart-btn">&times;</button>
+    </div>
+    <ul id="lista-carrito"></ul>
+    <div class="cart-footer">
       <div class="total-section">
-        <div class="total-label">Total a pagar:</div>
+        <div class="total-label">Total:</div>
         <div class="total-amount">$<span id="total">0</span></div>
       </div>
-      
-      <button id="checkout">
+      <button id="checkout" class="checkout-btn">
         💳 Finalizar Compra
       </button>
-    </aside>
+    </div>
   </div>
+  <div id="cart-overlay" class="cart-overlay"></div>
 
   <script src="auth.js"></script>
   <script src="app.js"></script>
@@ -72,6 +82,29 @@
         hamburger.addEventListener('click', function() {
           hamburger.classList.toggle('active');
           navLinks.classList.toggle('active');
+        });
+      }
+
+      // Funcionalidad del carrito
+      const cartToggle = document.getElementById('cart-toggle');
+      const cartSidebar = document.getElementById('cart-sidebar');
+      const cartOverlay = document.getElementById('cart-overlay');
+      const closeCartBtn = document.getElementById('close-cart');
+
+      if (cartToggle && cartSidebar && cartOverlay && closeCartBtn) {
+        cartToggle.addEventListener('click', function() {
+          cartSidebar.classList.toggle('active');
+          cartOverlay.classList.toggle('active');
+        });
+
+        closeCartBtn.addEventListener('click', function() {
+          cartSidebar.classList.remove('active');
+          cartOverlay.classList.remove('active');
+        });
+
+        cartOverlay.addEventListener('click', function() {
+          cartSidebar.classList.remove('active');
+          cartOverlay.classList.remove('active');
         });
       }
     });
