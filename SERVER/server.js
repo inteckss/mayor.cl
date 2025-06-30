@@ -21,7 +21,6 @@ const productos = [
   { id: 2, nombre: 'Producto B', precio: 2000, imagen: "assets/2.png" },
   { id: 3, nombre: 'Producto C', precio: 3000, imagen: "assets/3.png" }
 ];
-let carrito = [];
 
 // Base de datos simulada de usuarios
 let usuarios = [
@@ -34,6 +33,11 @@ let usuarios = [
   }
 ];
 let nextUserId = 2;
+
+// Base de datos simulada de carritos por usuario
+let carritosPorUsuario = {
+  // Estructura: { userId: [{ id, nombre, precio, imagen, cantidad, fechaAgregado }] }
+};
 
 // Middleware para verificar token JWT
 function authenticateToken(req, res, next) {
@@ -159,19 +163,131 @@ app.get('/api/productos', (req, res) => {
   res.json(productos);
 });
 
-// Rutas para el carrito
-app.get('/api/carrito', (req, res) => {
-  res.json(carrito);
+// Rutas para el carrito persistente por usuario
+app.get('/api/carrito', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const carritoUsuario = carritosPorUsuario[userId] || [];
+  res.json(carritoUsuario);
 });
-app.post('/api/carrito', (req, res) => {
+
+app.post('/api/carrito', authenticateToken, (req, res) => {
+  const userId = req.user.id;
   const { id } = req.body;
-  const prod = productos.find(p => p.id === id);
-  if (prod) carrito.push(prod);
-  res.json(carrito);
+  
+  const producto = productos.find(p => p.id === id);
+  if (!producto) {
+    return res.status(404).json({ message: 'Producto no encontrado' });
+  }
+
+  // Inicializar carrito del usuario si no existe
+  if (!carritosPorUsuario[userId]) {
+    carritosPorUsuario[userId] = [];
+  }
+
+  // Verificar si el producto ya está en el carrito
+  const itemExistente = carritosPorUsuario[userId].find(item => item.id === id);
+  
+  if (itemExistente) {
+    // Si existe, incrementar cantidad
+    itemExistente.cantidad += 1;
+    itemExistente.fechaActualizado = new Date();
+  } else {
+    // Si no existe, agregar nuevo item
+    carritosPorUsuario[userId].push({
+      ...producto,
+      cantidad: 1,
+      fechaAgregado: new Date(),
+      fechaActualizado: new Date()
+    });
+  }
+
+  res.json(carritosPorUsuario[userId]);
 });
-app.delete('/api/carrito/:id', (req, res) => {
-  carrito = carrito.filter(p => p.id !== +req.params.id);
-  res.json(carrito);
+
+app.put('/api/carrito/:id', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const productId = parseInt(req.params.id);
+  const { cantidad } = req.body;
+
+  if (!carritosPorUsuario[userId]) {
+    return res.status(404).json({ message: 'Carrito no encontrado' });
+  }
+
+  const item = carritosPorUsuario[userId].find(item => item.id === productId);
+  if (!item) {
+    return res.status(404).json({ message: 'Producto no encontrado en el carrito' });
+  }
+
+  if (cantidad <= 0) {
+    // Si la cantidad es 0 o negativa, eliminar el item
+    carritosPorUsuario[userId] = carritosPorUsuario[userId].filter(item => item.id !== productId);
+  } else {
+    // Actualizar cantidad
+    item.cantidad = cantidad;
+    item.fechaActualizado = new Date();
+  }
+
+  res.json(carritosPorUsuario[userId]);
+});
+
+app.delete('/api/carrito/:id', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const productId = parseInt(req.params.id);
+
+  if (!carritosPorUsuario[userId]) {
+    return res.status(404).json({ message: 'Carrito no encontrado' });
+  }
+
+  carritosPorUsuario[userId] = carritosPorUsuario[userId].filter(item => item.id !== productId);
+  res.json(carritosPorUsuario[userId]);
+});
+
+app.delete('/api/carrito', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  carritosPorUsuario[userId] = [];
+  res.json({ message: 'Carrito vaciado exitosamente' });
+});
+
+// Endpoint para migrar carrito anónimo al usuario logueado
+app.post('/api/carrito/migrate', authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const { anonymousCart } = req.body;
+
+  if (!anonymousCart || !Array.isArray(anonymousCart)) {
+    return res.status(400).json({ message: 'Carrito anónimo inválido' });
+  }
+
+  // Inicializar carrito del usuario si no existe
+  if (!carritosPorUsuario[userId]) {
+    carritosPorUsuario[userId] = [];
+  }
+
+  // Agregar productos del carrito anónimo
+  anonymousCart.forEach(anonItem => {
+    const producto = productos.find(p => p.id === anonItem.id);
+    if (producto) {
+      const itemExistente = carritosPorUsuario[userId].find(item => item.id === anonItem.id);
+      
+      if (itemExistente) {
+        // Si existe, sumar cantidades
+        itemExistente.cantidad += anonItem.cantidad;
+        itemExistente.fechaActualizado = new Date();
+      } else {
+        // Si no existe, agregar nuevo item
+        carritosPorUsuario[userId].push({
+          ...producto,
+          cantidad: anonItem.cantidad,
+          fechaAgregado: new Date(),
+          fechaActualizado: new Date()
+        });
+      }
+    }
+  });
+
+  res.json({ 
+    message: 'Carrito migrado exitosamente',
+    cart: carritosPorUsuario[userId]
+  });
 });
 
 // Iniciar servidor
