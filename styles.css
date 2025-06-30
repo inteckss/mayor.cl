@@ -22,6 +22,12 @@ header nav a {
   color: #fff;
   margin-left: 1rem;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+header nav a:hover {
+  opacity: 0.8;
 }
 
 #productos {

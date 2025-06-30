@@ -11,7 +11,7 @@
     <h1>Mi Tienda</h1>
     <nav>
       <a href="index.html">Catálogo</a>
-      <a href="carrito.html">Carrito (<span id="contador-carrito">0</span>)</a>
+      <a href="cart.html">Carrito (<span id="contador-carrito">0</span>)</a>
       <a href="login.html">Login</a>
     </nav>
   </header>
@@ -28,5 +28,12 @@
   </aside>
 
   <script src="app.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Actualizar navegación al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      updateNavigation();
+    });
+  </script>
 </body>
 </html>
