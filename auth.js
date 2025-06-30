@@ -63,13 +63,15 @@ async function loginUser(credentials) {
     
     if (response.ok) {
       // Guardar token y datos del usuario
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('authToken', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
       showMessage('Inicio de sesión exitoso. Redirigiendo...', 'success');
       
-      // Redirigir inmediatamente sin delay
-      window.location.href = 'index.html';
+      // Esperar un momento para mostrar el mensaje y luego redirigir
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1000);
     } else {
       showMessage(data.message || 'Credenciales incorrectas');
     }
@@ -81,7 +83,7 @@ async function loginUser(credentials) {
 
 // Logout
 function logout() {
-  localStorage.removeItem('token');
+  localStorage.removeItem('authToken'); // Cambiar 'token' a 'authToken'
   localStorage.removeItem('user');
   
   // Actualizar navegación
@@ -95,7 +97,7 @@ function logout() {
 
 // Verificar si el usuario está logueado
 function isLoggedIn() {
-  return localStorage.getItem('token') !== null;
+  return localStorage.getItem('authToken') !== null; // Cambiar 'token' a 'authToken'
 }
 
 // Obtener datos del usuario actual

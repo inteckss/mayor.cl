@@ -72,6 +72,9 @@
         if (typeof updateNavigation === 'function') {
           updateNavigation();
         }
+        if (typeof syncCartOnLogin === 'function') {
+          syncCartOnLogin();
+        }
       }, 100);
       
       // Funcionalidad del menú hamburger
